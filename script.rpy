@@ -1,6 +1,4 @@
-﻿# Вы можете расположить сценарий своей игры в этом файле.
-
-# Скрипт для рандома
+﻿# Скрипт для рандома
 init python:
     import random
 
@@ -103,7 +101,7 @@ image town_Bert_1 = "town_Bert_1.png"
 image Man_upside_down = "Man_upside_down.png"
 image Man_upside_down_Bert = "Man_upside_down_Bert.png"
 image Man_upside_down_Ann = "Man_upside_down_Ann.png"
-image Man_upside_ down_ann_smoking_1 = "Man_upside_ down_ann_smoking_1.png"
+image Man_upside_down_ann_smoking_1 = "Man_upside_ down_ann_smoking_1.png"
 image man_upside_down_Ann_smoking_2 = "man_upside_down_Ann_smoking_2.png"
 image man_upside_down_Ann_smoking_3 = "man_upside_down_Ann_smoking_3.png"
 image town_will_town = "town_will_town.png"
@@ -423,7 +421,7 @@ label start:
     scene Man_upside_down_Bert
     b "В смысле «ПОЙДЁМТЕ ДАЛЬШЕ»???"
     b "У ВАС ЧЕЛОВЕКА УБИЛИ! А вы просто хотите пройти мимо?"
-    scene Man_upside_ down_ann_smoking_1
+    scene Man_upside_down_ann_smoking_1
     a "Что ж, он был хорошим человеком…"
     scene man_upside_down_Ann_smoking_2
     a "Стоит почтить его память."
