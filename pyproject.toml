@@ -1,0 +1,25 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+
+# Настройки pylint через конфигурацию, чтобы CI видел их без отдельного .pylintrc
+[pylint.'MESSAGES CONTROL']
+disable = [
+  "C0114",  # missing-module-docstring
+  "C0116",  # missing-function-docstring
+  "C0103",  # invalid-name
+]
+
+# Пути, которые pylint будет сканировать
+[tool.pylint]
+jobs = 1
+load-plugins = []
+init-hook = "import sys; sys.path.insert(0, 'game')"
+ignore-patterns = [
+  "tests/.*",
+  "venv/.*",
+]
+extension-pkg-whitelist = []
