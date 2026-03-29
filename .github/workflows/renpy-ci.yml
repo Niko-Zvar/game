@@ -1,70 +1,38 @@
-name: Ren'Py CI
+name: Ren'Py CI (Docker)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master, develop ]
 
 jobs:
-  full-check:
+  renpy-lint:
     runs-on: ubuntu-latest
+    container:
+      image: renpy/renpy:latest
+      options: --user root
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Python dependencies
+      - name: Install Python linters
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pylint black
-
-      - name: Cache Ren'Py SDK
-        id: cache-renpy
-        uses: actions/cache@v4
-        with:
-          path: renpy
-          key: renpy-sdk-8.5.2-${{ runner.os }}
-
-      - name: Download Ren'Py SDK
-        if: steps.cache-renpy.outputs.cache-hit != 'true'
-        run: |
-          echo "Downloading Ren'Py 8.3.6 SDK..."
-          curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.3.6/renpy-8.3.6-sdk.tar.bz2
-          tar -xjf renpy.tar.bz2
-          mv renpy-8.3.6-sdk renpy
-          chmod +x renpy/renpy.sh
-          # Удаляем лишнее из SDK, чтобы не конфликтовало с твоим проектом
-          rm -rf renpy/gui renpy/launcher
-
-      - name: Clean Ren'Py SDK defaults
-        run: |
-          rm -rf renpy/gui renpy/launcher
-
-      - name: Clean old compiled files
-        run: |
-          echo "Cleaning old .rpyc files..."
-          find . -name "*.rpyc" -delete 2>/dev/null || true
-          find . -name "*.rpymc" -delete 2>/dev/null || true
-          rm -rf __pycache__ game/__pycache__ 2>/dev/null || true
+          pip install black pylint
 
       - name: Black check
         run: |
-          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*") || true
+          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*") || true
 
       - name: Pylint
         run: |
-          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./renpy/*") || true
+          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*") || true
 
       - name: Run Ren'Py Lint
         run: |
-          ./renpy/renpy.sh . lint --error-on-any
+          # Запускаем линтер внутри контейнера. 
+          # Мы передаем точку "." как корень проекта.
+          # Флаг --error-on-any останавливает при любой ошибке.
+          renpy . lint --error-on-any
           
