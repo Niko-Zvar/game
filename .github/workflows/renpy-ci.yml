@@ -75,4 +75,4 @@ jobs:
         run: |
           echo "🚀 Running Ren'Py Lint..."
           # ПУТЬ ПРАВИЛЬНЫЙ: ./renpy/renpy.sh
-          ./renpy/renpy.sh . lint --error-on-any
+          ./renpy/renpy.sh game lint --error-on-any
