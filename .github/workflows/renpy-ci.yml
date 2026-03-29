@@ -63,18 +63,10 @@ jobs:
 
       - name: Run Ren'Py Lint (Scoped)
         run: |
-          echo "🚀 Running Ren'Py Lint on project files only..."
+          echo "🚀 Running Ren'Py Lint..."
           
-          # Генерируем список файлов .rpy, исключая папку SDK (renpy) и системные папки
-          # Это предотвращает загрузку конфликтов из launcher/game/testcases.rpy внутри SDK
-          PROJECT_FILES=$(find . -name "*.rpy" -not -path "./renpy/*" -not -path "./.git/*" | tr '\n' ' ')
-          
-          if [ -z "$PROJECT_FILES" ]; then
-            echo "No .rpy files found in project root (excluding SDK)."
-            exit 0
-          fi
-
-          # Запускаем линтер только на найденных файлах
-          # Используем --no-warn, чтобы не спамить предупреждениями, если они не критичны
-          ./renpy/renpy.sh lint --error-on-any --no-warn $PROJECT_FILES
+          # Создаем список файлов .rpy, исключая папку SDK
+          # Используем xargs для безопасной передачи аргументов
+          find . -name "*.rpy" -not -path "./renpy/*" -not -path "./.git/*" -print0 | \
+            xargs -0 -r ./renpy/renpy.sh lint --error-on-any --no-warn
           
