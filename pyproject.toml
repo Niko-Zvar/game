@@ -5,7 +5,7 @@ target-version = ["py311"]
 [tool.isort]
 profile = "black"
 
-# Настройки pylint через конфигурацию, чтобы CI видел их без отдельного .pylintrc
+#Настройки pylint через конфигурацию, чтобы CI видел их без отдельного .pylintrc
 [pylint.'MESSAGES CONTROL']
 disable = [
   "C0114",  # missing-module-docstring
@@ -13,7 +13,7 @@ disable = [
   "C0103",  # invalid-name
 ]
 
-# Пути, которые pylint будет сканировать
+#Пути, которые pylint будет сканировать
 [tool.pylint]
 jobs = 1
 load-plugins = []
