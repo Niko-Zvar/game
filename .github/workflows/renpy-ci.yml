@@ -1,25 +1,31 @@
-name: Ren'Py CI (Docker)
+name: Ren'Py CI (Fixed)
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main ]
 
 jobs:
-  renpy-lint:
+  full-check:
     runs-on: ubuntu-latest
-    container:
-      image: renpy/renpy:latest
-      options: --user root
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install Python linters
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
         run: |
-          pip install black pylint
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pylint black
 
       - name: Black check
         run: |
@@ -31,8 +37,7 @@ jobs:
 
       - name: Run Ren'Py Lint
         run: |
-          # Запускаем линтер внутри контейнера. 
-          # Мы передаем точку "." как корень проекта.
-          # Флаг --error-on-any останавливает при любой ошибке.
-          renpy . lint --error-on-any
+          echo "🚀 Running Ren'Py Lint..."
+          # Используем твою локальную версию Ren'Py
+          ./renpy.sh . lint --error-on-any
           
