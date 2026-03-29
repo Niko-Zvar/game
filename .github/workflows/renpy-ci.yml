@@ -52,16 +52,13 @@ jobs:
 
       - name: Black check
         run: |
-          # Проверяем форматирование Python файлов
-          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*") || true
+          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*") || true
 
       - name: Pylint
         run: |
-          # Проверяем качество кода
-          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*") || true
+          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./renpy/*") || true
 
-
-      - name: Run Ren'Py Lint (Scoped)
+      - name: Run Ren'Py Lint
         run: |
           ./renpy/renpy.sh game lint --error-on-any
           
