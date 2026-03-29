@@ -1,20 +1,9 @@
-name: Ren'Py CI
-
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-
-jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Cache Ren'Py
         id: cache-renpy
@@ -30,10 +19,20 @@ jobs:
           action: install
           install_dir: renpy
 
-      - name: Run Ren'Py Lint (with disabled testcases)
+      - name: Clean testcases and compiled files
+        run: |
+          echo "=== Cleaning possible duplicate testcases ==="
+          rm -fv game/testcases.rpy game/testcases.rpyc
+          rm -fv gui/game/testcases.rpy gui/game/testcases.rpyc
+          rm -fv game/gui/game/testcases.rpy game/gui/game/testcases.rpyc 2>/dev/null || true
+          
+          echo "=== Removing all .rpyc files to force recompile ==="
+          find game -name "*.rpyc" -delete 2>/dev/null || true
+          find gui -name "*.rpyc" -delete 2>/dev/null || true
+
+      - name: Run Ren'Py Lint
         uses: Ayowel/renpy-setup-action@v2.0.1
         with:
-          action: lint
+          action: exec
           install_dir: renpy
-          game: .
-          extra_args: "--config config.testcases=False"
+          run: lint . --define config.testcases=False
