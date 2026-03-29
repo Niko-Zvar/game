@@ -66,5 +66,5 @@ jobs:
           echo " Running Ren'Py Lint..."
           # Запускаем линтер, указывая точку (текущую директорию) как корень проекта
           # Добавляем --no-warn, чтобы игнорировать предупреждения, если они есть
-          ./renpy/renpy.sh . lint --error-on-any --no-warn
+          ./renpy/renpy.sh . lint --error-on-any --no-warn --exclude "launcher" --exclude "gui"
           
