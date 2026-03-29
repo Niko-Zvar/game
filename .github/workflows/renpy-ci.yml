@@ -15,6 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          path: .
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -64,4 +65,3 @@ jobs:
           echo "🚀 Running Ren'Py Lint..."
           # ПУТЬ ПРАВИЛЬНЫЙ: ./renpy/renpy.sh
           ./renpy/renpy.sh . lint --error-on-any
-          
