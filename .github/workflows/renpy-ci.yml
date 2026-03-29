@@ -60,5 +60,5 @@ jobs:
 
       - name: Run Ren'Py Lint
         run: |
-          ./renpy/renpy.sh game lint --error-on-any
+          ./renpy/renpy.sh . lint --error-on-any
           
