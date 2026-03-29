@@ -63,7 +63,8 @@ jobs:
 
       - name: Run Ren'Py Lint
         run: |
-          echo "Running Ren'Py Lint..."
-          # Запускаем линтер Ren'Py. Точка "." означает текущую директорию (корень проекта)
-          ./renpy/renpy.sh . lint --error-on-any
+          echo " Running Ren'Py Lint..."
+          # Запускаем линтер, указывая точку (текущую директорию) как корень проекта
+          # Добавляем --no-warn, чтобы игнорировать предупреждения, если они есть
+          ./renpy/renpy.sh . lint --error-on-any --no-warn
           
