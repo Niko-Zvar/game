@@ -29,9 +29,10 @@ jobs:
 
       - name: Black check
         run: |
-          black --check game
+          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*")
 
       - name: Pylint
         run: |
-          pylint game tests || true
+          # Также ищем файлы динамически для pylint
+          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*") || true
           
