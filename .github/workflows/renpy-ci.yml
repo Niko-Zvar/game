@@ -27,17 +27,41 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pylint black
 
+      # --- СКАЧИВАЕМ SDK ОБЯЗАТЕЛЬНО ---
+      - name: Cache Ren'Py SDK
+        id: cache-renpy
+        uses: actions/cache@v4
+        with:
+          path: renpy
+          key: renpy-sdk-8.5.2-${{ runner.os }}
+
+      - name: Download Ren'Py SDK
+        if: steps.cache-renpy.outputs.cache-hit != 'true'
+        run: |
+          echo "Downloading Ren'Py 8.5.2 SDK..."
+          curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2
+          tar -xjf renpy.tar.bz2
+          mv renpy-8.5.2-sdk renpy
+          chmod +x renpy/renpy.sh
+
+      - name: Clean old compiled files
+        run: |
+          echo "Cleaning old .rpyc files..."
+          find . -name "*.rpyc" -delete 2>/dev/null || true
+          find . -name "*.rpymc" -delete 2>/dev/null || true
+          rm -rf __pycache__ game/__pycache__ 2>/dev/null || true
+
       - name: Black check
         run: |
-          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*") || true
+          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*") || true
 
       - name: Pylint
         run: |
-          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*") || true
+          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./renpy/*") || true
 
       - name: Run Ren'Py Lint
         run: |
           echo "🚀 Running Ren'Py Lint..."
-          # Используем твою локальную версию Ren'Py
-          ./renpy.sh . lint --error-on-any
+          # ПУТЬ ПРАВИЛЬНЫЙ: ./renpy/renpy.sh
+          ./renpy/renpy.sh . lint --error-on-any
           
