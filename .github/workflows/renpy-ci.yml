@@ -25,13 +25,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pylint flake8 black
+          pip install pylint black
 
       - name: Black check
         run: |
-          black --check game tests
+          black --check Game tests
 
       - name: Pylint
         run: |
-          pylint game tests || true
+          pylint Game tests || true
           
