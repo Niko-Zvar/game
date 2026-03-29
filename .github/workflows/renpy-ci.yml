@@ -68,5 +68,5 @@ jobs:
           # Создаем список файлов .rpy, исключая папку SDK
           # Используем xargs для безопасной передачи аргументов
           find . -name "*.rpy" -not -path "./renpy/*" -not -path "./.git/*" -print0 | \
-            xargs -0 -r ./renpy/renpy.sh lint --error-on-any --no-warn
+            xargs -0 -r ./renpy/renpy.sh game lint --error-on-any --no-warn
           
