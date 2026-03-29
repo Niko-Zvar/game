@@ -32,15 +32,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: renpy
-          key: renpy-sdk-8.3.6-${{ runner.os }}
+          key: renpy-sdk-8.5.2-${{ runner.os }}
 
       - name: Download Ren'Py SDK
         if: steps.cache-renpy.outputs.cache-hit != 'true'
         run: |
-          echo "Downloading Ren'Py 8.3.6 SDK..."
-          curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.3.6/renpy-8.3.6-sdk.tar.bz2
+          echo "Downloading Ren'Py 8.5.2 SDK..."
+          curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2
           tar -xjf renpy.tar.bz2
-          mv renpy-8.3.6-sdk renpy
+          mv renpy-8.5.2-sdk renpy
           chmod +x renpy/renpy.sh
 
       - name: Clean old compiled files
