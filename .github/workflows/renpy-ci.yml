@@ -29,9 +29,9 @@ jobs:
 
       - name: Black check
         run: |
-          black --check Game
+          black --check game
 
       - name: Pylint
         run: |
-          pylint Game tests || true
+          pylint game tests || true
           
