@@ -24,16 +24,16 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f game-source/requirements.txt ]; then pip install -r game-source/requirements.txt; fi
+          if [ -f game/requirements.txt ]; then pip install -r game/requirements.txt; fi
           pip install pylint black
 
       - name: Black check
         run: |
-          black --check $(find game -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
 
       - name: Pylint
         run: |
-          pylint $(find game -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
 
       - name: Clean, Download SDK and Run Lint
         run: |
