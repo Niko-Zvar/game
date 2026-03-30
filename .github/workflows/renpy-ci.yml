@@ -75,5 +75,5 @@ jobs:
       - name: Run Ren'Py Lint
         run: |
           echo "🚀 Running Ren'Py Lint..."
-          # ПУТЬ ПРАВИЛЬНЫЙ: ./renpy/renpy.sh
-          ./renpy/renpy.sh game lint --error-on-any
+          # Запускаем линтер через Python, указывая ПОЛНЫЙ путь к папке 'game'
+          python -m renpy.lint --error-on-any /home/runner/work/game/game
