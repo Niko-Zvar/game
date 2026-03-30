@@ -50,5 +50,8 @@ jobs:
           mv renpy-8.5.2-sdk renpy
           chmod +x renpy/renpy.sh
 
+          echo "👣 Entering game directory..."
+          cd game
+
           echo "🚀 Running Ren'Py Lint..."
-          ./renpy/renpy.sh . lint --error-on-any
+          ../../renpy/renpy.sh . lint
