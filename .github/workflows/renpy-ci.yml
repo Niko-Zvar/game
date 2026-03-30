@@ -54,4 +54,4 @@ jobs:
           cd game
 
           echo "🚀 Running Ren'Py Lint..."
-          ../../renpy/renpy.sh . lint
+          /home/runner/work/game/renpy/renpy.sh . lint
