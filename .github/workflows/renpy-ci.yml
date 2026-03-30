@@ -75,5 +75,9 @@ jobs:
       - name: Run Ren'Py Lint
         run: |
           echo "🚀 Running Ren'Py Lint..."
-          # Запускаем линтер через Python, указывая ПОЛНЫЙ путь к папке 'game'
-          python -m renpy.lint --error-on-any /home/runner/work/game/game
+          # 1. Переходим в корень репозитория
+          cd /home/runner/work/game
+          # 2. Запускаем линтер из корня.
+          # ./renpy — это папка с SDK в корне.
+          # game — это папка с твоей игрой (она лежит в корне).
+          ./renpy/renpy.sh game lint --error-on-any
