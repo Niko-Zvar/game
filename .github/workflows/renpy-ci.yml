@@ -15,7 +15,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          path: ./game-source # Выгружаем код в отдельную папку
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -52,4 +51,4 @@ jobs:
           chmod +x renpy/renpy.sh
 
           echo "🚀 Running Ren'Py Lint..."
-          ./renpy/renpy.sh ./game-source/game lint --error-on-any
+          ./renpy/renpy.sh ./game lint --error-on-any
