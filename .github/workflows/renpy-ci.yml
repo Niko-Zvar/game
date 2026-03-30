@@ -29,11 +29,11 @@ jobs:
 
       - name: Black check
         run: |
-          black --check $(find game-source -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+          black --check $(find game -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
 
       - name: Pylint
         run: |
-          pylint $(find game-source -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+          pylint $(find game -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
 
       - name: Clean, Download SDK and Run Lint
         run: |
