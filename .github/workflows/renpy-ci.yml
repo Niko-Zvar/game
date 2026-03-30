@@ -40,9 +40,9 @@ jobs:
           cd /home/runner/work/game
 
           echo "🧹 Deep clean..."
-          find ./game-source -name "*.rpyc" -delete 2>/dev/null || true
-          find ./game-source -name "*.rpymc" -delete 2>/dev/null || true
-          rm -rf ./game-source/__pycache__ ./game-source/game/__pycache__ 2>/dev/null || true
+          find ./game -name "*.rpyc" -delete 2>/dev/null || true
+          find ./game -name "*.rpymc" -delete 2>/dev/null || true
+          rm -rf ./game/__pycache__ ./game/__pycache__ 2>/dev/null || true
 
           echo "⬇️ Downloading Ren'Py 8.5.2 SDK..."
           curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2
@@ -51,4 +51,4 @@ jobs:
           chmod +x renpy/renpy.sh
 
           echo "🚀 Running Ren'Py Lint..."
-          ./renpy/renpy.sh ./game lint --error-on-any
+          ./renpy/renpy.sh . lint --error-on-any
