@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          path: ./game-source
+          path: ./game-source # Выгружаем код в отдельную папку
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,59 +25,31 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f game-source/requirements.txt ]; then pip install -r game-source/requirements.txt; fi
           pip install pylint black
 
-      # --- СКАЧИВАЕМ SDK ОБЯЗАТЕЛЬНО ---
-      - name: Cache Ren'Py SDK
-        id: cache-renpy
-        uses: actions/cache@v4
-        with:
-          path: renpy
-          key: renpy-sdk-8.5.2-${{ runner.os }}
-
-      - name: Download Ren'Py SDK
-        if: steps.cache-renpy.outputs.cache-hit != 'true'
+      - name: Black check
         run: |
-          echo "Downloading Ren'Py 8.5.2 SDK..."
+          black --check $(find game-source -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+
+      - name: Pylint
+        run: |
+          pylint $(find game-source -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*")
+
+      - name: Clean, Download SDK and Run Lint
+        run: |
+          cd /home/runner/work/game
+
+          echo "🧹 Deep clean..."
+          find ./game-source -name "*.rpyc" -delete 2>/dev/null || true
+          find ./game-source -name "*.rpymc" -delete 2>/dev/null || true
+          rm -rf ./game-source/__pycache__ ./game-source/game/__pycache__ 2>/dev/null || true
+
+          echo "⬇️ Downloading Ren'Py 8.5.2 SDK..."
           curl -L -o renpy.tar.bz2 https://www.renpy.org/dl/8.5.2/renpy-8.5.2-sdk.tar.bz2
           tar -xjf renpy.tar.bz2
           mv renpy-8.5.2-sdk renpy
           chmod +x renpy/renpy.sh
 
-      - name: Clean old compiled files
-        run: |
-          echo "Cleaning old .rpyc files..."
-          find . -name "*.rpyc" -delete 2>/dev/null || true
-          find . -name "*.rpymc" -delete 2>/dev/null || true
-          rm -rf __pycache__ game/__pycache__ 2>/dev/null || true
-
-      - name: Black check
-        run: |
-          black --check $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./__pycache__/*" -not -path "./renpy/*") || true
-
-      - name: Pylint
-        run: |
-          pylint $(find . -name "*.py" -not -path "./.git/*" -not -path "./venv/*" -not -path "./renpy/*") || true
-
-      - name: Clean all compiled and cache files
-        run: |
-          echo "🧹 Deep clean..."
-          # Удаляем все скомпилированные файлы
-          find . -name "*.rpyc" -delete 2>/dev/null || true
-          find . -name "*.rpymc" -delete 2>/dev/null || true
-          rm -rf __pycache__ game/__pycache__ 2>/dev/null || true
-          # Очищаем кэш самого Ren'Py (внутри скачанного SDK)
-          rm -rf renpy/cache 2>/dev/null || true
-          # Удаляем временные файлы, если есть
-          rm -rf renpy/tmp 2>/dev/null || true
-
-      - name: Run Ren'Py Lint
-        run: |
           echo "🚀 Running Ren'Py Lint..."
-          # 1. Переходим в корень репозитория
-          cd /home/runner/work/game
-          # 2. Запускаем линтер из корня.
-          # ./renpy — это папка с SDK в корне.
-          # game — это папка с твоей игрой (она лежит в корне).
-          ./renpy/renpy.sh game lint --error-on-any
+          ./renpy/renpy.sh ./game-source/game lint --error-on-any
